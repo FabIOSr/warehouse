@@ -4,25 +4,23 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <title>{{ config('app.name', 'StoreHouse') }}</title>
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!-- Scripts -->
     @livewireStyles()
+    @stack('css')
 </head>
 
 <body>
     <div id="app">
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-uppercase" href="#">WareHouse</a>
-            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-uppercase" href="{{ url('/') }}">StoreHouse</a>
+            <button class="navbar-toggler position-absolute d-md-none d-sm-block collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -33,9 +31,14 @@
                     @guest
                         <a class="nav-link px-3" href="{{ route('login') }}">Entrar</a>
                     @else
-                        <a class="nav-link px-3" href="#">
-                            {{ auth()->user()->name }}
+                        <a class="nav-link px-3 d-none d-md-block d-lg-block"  href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                      document.getElementById('logout-form').submit();">
+                            Sair
                         </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     @endauth
                 </div>
             </div>
@@ -46,6 +49,12 @@
                 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                     <div class="position-sticky pt-3 sidebar-sticky">
                         <ul class="nav flex-column">
+                            <li class="nav-item border-bottom">
+                                <a class="nav-link" aria-current="page" href="javascript:void(0)">
+                                    <span data-feather="user" class="align-text-bottom text-danger"></span>
+                                    {{ auth()->user()->name }}
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="#">
                                     <span data-feather="home" class="align-text-bottom"></span>
@@ -86,6 +95,15 @@
                                 <a class="nav-link" href="#">
                                     <span data-feather="lock" class="align-text-bottom"></span>
                                     Painel Acessos
+                                </a>
+                            </li>
+
+                            <li class="nav-item border-top d-xs-block d-sm-block d-md-none">
+                                <a class="nav-link" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                              document.getElementById('logout-form').submit();">
+                                    <span data-feather="lock" class="align-text-bottom"></span>
+                                    Sair do Sistema
                                 </a>
                             </li>
                         </ul>
@@ -171,12 +189,7 @@
         </div>
     </div>
     @livewireScripts()
-    <script>
-        //modal close trigger after submited
-        window.addEventListener('close-modal', (event) => {
-            $('.trigger').trigger('click');
-        });
-    </script>
+    @stack('js')
 </body>
 
 </html>

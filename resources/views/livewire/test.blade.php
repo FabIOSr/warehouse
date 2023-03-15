@@ -30,3 +30,12 @@
         </div>
     </div>
 </div>
+
+@push('js')
+<script>        
+//modal close trigger after submited
+window.addEventListener('close-modal', (event) => {
+    $('.trigger').trigger('click');
+});
+</script>
+@endpush

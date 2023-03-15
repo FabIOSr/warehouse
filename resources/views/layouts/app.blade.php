@@ -81,12 +81,6 @@
     </div>
     <script type="module" src="{{ asset('js/jquery.min.js') }}"></script>
     @livewireScripts()
-    <script>
-        
-    //modal close trigger after submited
-    window.addEventListener('close-modal', (event) => {
-        $('.trigger').trigger('click');
-    });
-    </script>
+    @stack('js')    
 </body>
 </html>
